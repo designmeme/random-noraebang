@@ -1,0 +1,7 @@
+{
+  "name": "random-noraebang",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
