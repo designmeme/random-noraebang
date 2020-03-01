@@ -23,13 +23,13 @@ export class AuthService {
   }
 
   login() {
-    this.auth.signInWithPopup(new fireAuth.GoogleAuthProvider())
+    this.auth.auth.signInWithPopup(new fireAuth.GoogleAuthProvider())
       .then(data => console.log('signInWithPopup', data))
       .catch(error => console.error('signInWithPopup', error));
   }
 
   logout() {
-    this.auth.signOut()
+    this.auth.auth.signOut()
       .then(data => console.log('signout', data))
       .catch(error => console.error('signout', error));
   }

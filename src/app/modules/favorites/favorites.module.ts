@@ -1,17 +1,22 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+
+import { IonicModule } from '@ionic/angular';
+
+import { FavoritesPageRoutingModule } from './favorites-routing.module';
+
+import { FavoritesPage } from './favorites.page';
 import {SharedModule} from '../../shared/shared.module';
 
-import { FavoritesRoutingModule } from './favorites-routing.module';
-import { FavoritesComponent } from './components/favorites/favorites.component';
-
-
 @NgModule({
-  declarations: [FavoritesComponent],
   imports: [
     CommonModule,
-    FavoritesRoutingModule,
-    SharedModule
-  ]
+    FormsModule,
+    IonicModule,
+    FavoritesPageRoutingModule,
+    SharedModule,
+  ],
+  declarations: [FavoritesPage]
 })
-export class FavoritesModule { }
+export class FavoritesPageModule {}

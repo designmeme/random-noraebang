@@ -180,7 +180,8 @@
     }
   },
   "cli": {
-    "defaultCollection": "@ionic/angular-toolkit"
+    "defaultCollection": "@ionic/angular-toolkit",
+    "analytics": "37101869-03ac-4126-975d-9271822e87e4"
   },
   "schematics": {
     "@ionic/angular-toolkit:component": {

@@ -27,6 +27,7 @@ import {AngularFireAuthModule} from '@angular/fire/auth';
 import {DOCUMENT} from '@angular/common';
 import {version} from '../../package.json';
 import {MetaLoader, MetaModule, MetaStaticLoader, PageTitlePositioning} from '@ngx-meta/core';
+import {IonicStorageModule} from '@ionic/storage';
 
 export function metaFactory(document: Document): MetaLoader {
   const origin = environment.url;
@@ -69,7 +70,10 @@ export function metaFactory(document: Document): MetaLoader {
   entryComponents: [],
   imports: [
     BrowserModule,
-    IonicModule.forRoot(),
+    IonicModule.forRoot({
+      // mode: 'ios',
+    }),
+    IonicStorageModule.forRoot(),
     AppRoutingModule,
 
     HttpClientModule,

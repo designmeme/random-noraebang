@@ -9,37 +9,15 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        loadChildren: () => import('../home/home.module').then(m => m.HomeModule),
+        loadChildren: () => import('../home/home.module').then(m => m.HomePageModule),
       },
       {
         path: 'favorites',
-        loadChildren: () => import('../favorites/favorites.module').then(m => m.FavoritesModule),
-      },
-
-      {
-        path: 'tab1',
-        loadChildren: () =>
-          import('../../tab1/tab1.module').then(m => m.Tab1PageModule)
+        loadChildren: () => import('../favorites/favorites.module').then(m => m.FavoritesPageModule),
       },
       {
-        path: 'tab2',
-        children: [
-          {
-            path: '',
-            loadChildren: () =>
-              import('../../tab2/tab2.module').then(m => m.Tab2PageModule)
-          }
-        ]
-      },
-      {
-        path: 'tab3',
-        children: [
-          {
-            path: '',
-            loadChildren: () =>
-              import('../../tab3/tab3.module').then(m => m.Tab3PageModule)
-          }
-        ]
+        path: 'settings',
+        loadChildren: () => import('../settings/settings.module').then(m => m.SettingsPageModule),
       },
     ]
   },
