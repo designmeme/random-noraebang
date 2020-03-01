@@ -1,0 +1,22 @@
+<main>
+  <router-outlet></router-outlet>
+</main>
+
+<div class="app-footer">
+  <app-ad></app-ad>
+
+  <nav class="tab-bar">
+    <a class="menu-item" [routerLink]="['/']" routerLinkActive="active">
+      <mat-icon class="menu-icon" aria-hidden="false" aria-label="랜덤노래방">music_video</mat-icon>
+      <div class="menu-title">랜덤노래방</div>
+    </a>
+    <a class="menu-item" [routerLink]="['/favorites']" routerLinkActive="active">
+      <mat-icon class="menu-icon" aria-hidden="false" aria-label="즐겨찾기">favorite</mat-icon>
+      <div class="menu-title">즐겨찾기</div>
+    </a>
+    <a class="menu-item" [routerLink]="['/settings']" routerLinkActive="active">
+      <mat-icon class="menu-icon" aria-hidden="false" aria-label="설정">settings</mat-icon>
+      <div class="menu-title">설정</div>
+    </a>
+  </nav>
+</div>

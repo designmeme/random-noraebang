@@ -1,0 +1,43 @@
+@import 'shared';
+
+$ad-height: 80px;
+$tab-bar-height: 60px;
+
+:host {
+  > main {
+    padding-bottom: $ad-height + $tab-bar-height;
+  }
+}
+
+.app-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+.tab-bar {
+  display: flex;
+  justify-content: space-between;
+  height: $tab-bar-height;
+  background-color: rgba(palette(Gray, 200), .75);
+  white-space: nowrap;
+  .menu-item {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-width: 7em;
+    flex-shrink: 0;
+    font-size: 14px;
+    color: palette(Gray, 500);
+    text-decoration: none;
+    .menu-title {
+      margin-top: .4em;
+    }
+
+    &.active {
+      color: palette(Purple, 500);
+      font-weight: 600;
+    }
+  }
+}

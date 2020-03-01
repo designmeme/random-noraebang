@@ -1,0 +1,33 @@
+<header class="page-header">
+  <div class="center">
+    <h2 class="page-title">
+      <mat-icon class="icon" aria-hidden="true">favorite</mat-icon>
+      즐겨찾기
+    </h2>
+  </div>
+  <div class="left">
+
+  </div>
+  <div class="right">
+    <button class="btn">편집</button>
+  </div>
+</header>
+
+<div class="page-contents">
+
+  <div *ngIf="authService.user$ | async as user;">
+    사용자: {{user.email}}
+  </div>
+  <div *ngIf="authService.isNotLoggedIn$ | async">
+    로그인하세요!
+  </div>
+
+  <ol *ngIf="list$ | async as list" class="list">
+    <li *ngFor="let item of list">{{item | json}}</li>
+  </ol>
+
+
+  <button (click)="login()">login</button>
+  <button (click)="logout()">logout</button>
+
+</div>

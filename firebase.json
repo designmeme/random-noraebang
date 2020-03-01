@@ -1,0 +1,60 @@
+{
+  "hosting": [
+    {
+      "target": "app",
+      "public": "www",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ],
+      "rewrites": [
+        {
+          "source": "/api/v1/**",
+          "function": "webApi"
+        },
+        {
+          "source": "**",
+          "destination": "/index.html"
+        }
+      ],
+      "headers": [
+        {
+          "source" : "**/*.@(jpg|jpeg|gif|png|svg)",
+          "headers" : [
+            {
+              "key" : "Cache-Control",
+              "value" : "max-age=86400"
+            },
+            {
+              "key": "Content-Encoding",
+              "value": "gzip"
+            }
+          ]
+        },
+        {
+          "source": "**/*.@(js|css)",
+          "headers": [
+            {
+              "key": "Cache-Control",
+              "value": "max-age=31536000"
+            },
+            {
+              "key": "Content-Encoding",
+              "value": "gzip"
+            }
+          ]
+        },
+        {
+          "source": "**/ngsw-worker.js",
+          "headers": [
+            {
+              "key": "Cache-Control",
+              "value": "no-cache"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

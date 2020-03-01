@@ -1,0 +1,22 @@
+{
+  "targets": {
+    "random-noraebang": {
+      "hosting": {
+        "app": [
+          "random-noraebang"
+        ]
+      }
+    },
+    "random-noraebang-dev": {
+      "hosting": {
+        "app": [
+          "random-noraebang-dev"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "random-noraebang",
+    "dev": "random-noraebang-dev"
+  }
+}
