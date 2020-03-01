@@ -17,9 +17,8 @@
 <!--    </ion-toolbar>-->
   </ion-header>
 
-  <button (click)="logout()">logout</button>
   <div *ngIf="authService.isNotLoggedIn$ | async">
-    로그인하세요! <button (click)="login()">login</button>
+    로그인하세요!
   </div>
 
   <ng-container *ngIf="authService.user$ | async">

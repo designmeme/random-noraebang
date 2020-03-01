@@ -1,9 +1,56 @@
-<ion-header>
+<ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>settings</ion-title>
+    <ion-title>내 정보</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content [fullscreen]="true">
+  <ng-container *ngIf="authService.isNotLoggedIn$ | async">
+    <div class="login-banner">
+      <ion-button (click)="login()" expand="block">
+        <ion-icon name="logo-google" slot="start"></ion-icon>
+        지메일로 로그인하기
+      </ion-button>
+    </div>
+  </ng-container>
 
+  <ng-container *ngIf="authService.user$ | async as user">
+    <ion-list>
+      <ion-item>
+        <ion-icon name="happy-outline" slot="start"></ion-icon>
+        <ion-avatar slot="end">
+          <img src="{{user.photoURL}}">
+        </ion-avatar>
+        <ion-label>{{user.email}}</ion-label>
+      </ion-item>
+      <ion-item button (click)="logout()" [detailIcon]="false">
+        <ion-icon name="log-out-outline" slot="start"></ion-icon>
+        <ion-label>로그아웃</ion-label>
+      </ion-item>
+      <ion-item button (click)="logout()" [detailIcon]="false">
+        <ion-icon name="sad-outline" slot="start"></ion-icon>
+        <ion-label>탈퇴하기</ion-label>
+      </ion-item>
+    </ion-list>
+  </ng-container>
+
+  <ion-list-header>
+    <ion-label>앱 정보</ion-label>
+  </ion-list-header>
+
+  <ion-list>
+    <ion-item [attr.href]="mailto" [detailIcon]="false">
+      <ion-icon name="mail-outline" slot="start"></ion-icon>
+      <ion-label>개발자에게 메일 보내기</ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-icon name="information-circle-outline" slot="start"></ion-icon>
+      <ion-label>앱 버전</ion-label>
+      <ion-note>{{version}}</ion-note>
+    </ion-item>
+  </ion-list>
+
+  <ion-text color="medium">
+    <p class="copyright">Copyright &copy; Lee Jihye, All Rights Reserved.</p>
+  </ion-text>
 </ion-content>

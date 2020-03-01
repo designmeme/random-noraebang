@@ -39,14 +39,6 @@ export class FavoritesPage implements OnInit {
     );
   }
 
-  login() {
-    this.authService.login();
-  }
-
-  logout() {
-    this.authService.logout();
-  }
-
   delete(item: Favorite) {
     alert('delete');
   }
