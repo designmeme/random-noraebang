@@ -8,5 +8,7 @@ export interface Song {
 export interface Favorite {
   id?: string;
   song?: Song;
+  count?: number;
   createDate?: string;
+  updateDate?: string;
 }

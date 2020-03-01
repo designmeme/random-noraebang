@@ -12,16 +12,57 @@
     <ion-toolbar>
       <ion-title size="large">즐겨찾기</ion-title>
     </ion-toolbar>
-    <ion-toolbar>
-      <ion-searchbar></ion-searchbar>
-    </ion-toolbar>
+<!--    <ion-toolbar>-->
+<!--      <ion-searchbar></ion-searchbar>-->
+<!--    </ion-toolbar>-->
   </ion-header>
 
-  <ng-container *ngFor="let i of [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]">
-    dfkdlfjkd <br>
-    dfkdlfjkd <br>
-    dfkdlfjkd <br>
-    dfkdlfjkd <br>
+  <button (click)="logout()">logout</button>
+  <div *ngIf="authService.isNotLoggedIn$ | async">
+    로그인하세요! <button (click)="login()">login</button>
+  </div>
+
+  <ng-container *ngIf="authService.user$ | async">
+    <ion-list *ngIf="list$ | async as list" class="list">
+
+      <ion-item-sliding *ngFor="let item of list">
+        <ion-item>
+          <ion-label class="ion-text-wrap">
+            <ion-text>
+              <h3>{{item.song.title}}</h3>
+            </ion-text>
+            <ion-text color="primary">
+              <p>{{item.song.singer}}</p>
+            </ion-text>
+            <ion-text color="primary">
+              <p>{{item.song.tjNumber}}</p>
+            </ion-text>
+          </ion-label>
+          <ion-note slot="end" color="primary">
+            {{item.count}}
+          </ion-note>
+        </ion-item>
+        <ion-item-options side="end" (ionSwipe)="delete(item)">
+          <ion-item-option (click)="delete(item)" color="danger" expandable>
+            삭제
+          </ion-item-option>
+        </ion-item-options>
+      </ion-item-sliding>
+
+      <ion-item>
+        <ion-label class="ion-text-wrap">
+          <ion-text color="primary">
+            <h3>H3 Primary Title</h3>
+          </ion-text>
+          <p>Paragraph line 1</p>
+          <ion-text color="secondary">
+            <p>Paragraph line 2 secondary</p>
+          </ion-text>
+        </ion-label>
+      </ion-item>
+
+    </ion-list>
   </ng-container>
+
 </ion-content>
 
