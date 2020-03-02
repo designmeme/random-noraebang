@@ -51,11 +51,7 @@ export class SettingsPage implements OnInit {
   }
 
   logout() {
-    this.presentLogoutConfirm();
-  }
-
-  private async presentLogoutConfirm() {
-    const alert = await this.alertController.create({
+    this.alertController.create({
       header: '로그아웃',
       message: '로그아웃하시겠어요?',
       buttons: [
@@ -71,19 +67,14 @@ export class SettingsPage implements OnInit {
           }
         }
       ]
-    });
-
-    await alert.present();
+    }).then(alert => alert.present());
   }
+
 
   delete(user: User) {
-    this.presentDeleteConfirm(user);
-  }
-
-  private async presentDeleteConfirm(user: User) {
-    const alert = await this.alertController.create({
+    this.alertController.create({
       header: '탈퇴하기',
-      message: '탈퇴하시겠어요?<br>모든 정보가 즉시 삭제됩니다.',
+      message: '탈퇴하시겠어요?<br>계정 정보가 즉시 삭제됩니다.',
       buttons: [
         {
           text: '아니요',
@@ -92,37 +83,32 @@ export class SettingsPage implements OnInit {
           text: '예',
           handler: () => {
             user.delete()
-              .then(result => {
+              .then(() => {
                 this.alertController.create({
-                  header: '탈퇴완료',
-                  message: '탈퇴처리가 완료되었어요. 모든 정보를 삭제했습니다.',
-                  buttons: [
-                    {
-                      text: '확인'
-                    }
-                  ]
-                }).then(alertRetry => alertRetry.present());
+                  header: '탈퇴하기 완료',
+                  message: '탈퇴처리가 완료되었어요. 계정 정보를 삭제했습니다.',
+                  buttons: [{ text: '확인' }],
+                }).then(alert => alert.present());
               })
               .catch(error => {
                 if (error.code === 'auth/requires-recent-login') {
                   this.alertController.create({
                     header: '재로그인 필요',
-                    message: '탈퇴하려면 재로그인이 필요합니다.<br>다시 로그인 후 탈퇴하기를 시도해주세요.',
-                    buttons: [
-                      {
-                        text: '확인'
-                      }
-                    ]
-                  }).then(alertRetry => alertRetry.present());
+                    message: '안전한 탈퇴를 위해 재로그인이 필요해요.<br>다시 로그인 후 탈퇴하기를 시도해주세요.',
+                    buttons: [{ text: '확인' }],
+                  }).then(alert => alert.present());
+                } else {
+                  this.alertController.create({
+                    header: '탈퇴하기 실패',
+                    message: `에러가 발생했어요. 다시 시도해주세요. ${error.code}`,
+                    buttons: [{ text: '확인' }],
+                  }).then(alert => alert.present());
                 }
-                console.error(error);
               });
           }
         }
       ]
-    });
-
-    await alert.present();
+    }).then(alert => alert.present());
   }
 
 }
