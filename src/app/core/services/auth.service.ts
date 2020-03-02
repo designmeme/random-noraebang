@@ -22,15 +22,11 @@ export class AuthService {
   ) {
   }
 
-  login() {
-    this.auth.auth.signInWithPopup(new fireAuth.GoogleAuthProvider())
-      .then(data => console.log('signInWithPopup', data))
-      .catch(error => console.error('signInWithPopup', error));
+  async login() {
+    return await this.auth.auth.signInWithPopup(new fireAuth.GoogleAuthProvider());
   }
 
-  logout() {
-    this.auth.auth.signOut()
-      .then(data => console.log('signout', data))
-      .catch(error => console.error('signout', error));
+  async logout() {
+    return await this.auth.auth.signOut();
   }
 }
