@@ -17,9 +17,19 @@
 <!--    </ion-toolbar>-->
   </ion-header>
 
-  <div *ngIf="authService.isNotLoggedIn$ | async">
-    로그인하세요!
-  </div>
+  <ng-container *ngIf="authService.isNotLoggedIn$ | async">
+    <div class="login-banner">
+      <div class="icons">
+        <ion-icon name="musical-notes"></ion-icon>
+        <ion-icon name="arrow-forward-outline"></ion-icon>
+        <ion-icon name="heart"></ion-icon>
+      </div>
+      <br>
+      노래를 즐겨찾기에 보관하려면
+      <br>
+      <a [routerLink]="['/tabs/settings']">회원가입 혹은 로그인</a> 해주세요
+    </div>
+  </ng-container>
 
   <ng-container *ngIf="authService.user$ | async">
     <ion-list *ngIf="list$ | async as list" class="list">
