@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {Observable, of} from 'rxjs';
 import {Favorite} from '../../core/models';
 import {AuthService} from '../../core/services/auth.service';
-import {map, switchMap, tap} from 'rxjs/operators';
+import {catchError, map, switchMap, tap} from 'rxjs/operators';
 import {AngularFireDatabase} from '@angular/fire/database';
 
 @Component({
@@ -12,6 +12,7 @@ import {AngularFireDatabase} from '@angular/fire/database';
 })
 export class FavoritesPage implements OnInit {
   list$: Observable<Favorite[]>;
+  error: any;
 
   constructor(
     public authService: AuthService,
@@ -21,6 +22,7 @@ export class FavoritesPage implements OnInit {
   ngOnInit() {
     this.list$ = this.authService.user$.pipe(
       switchMap(user => {
+        // login
         if (user) {
           return this.db.list(`favorites/${user.uid}`).snapshotChanges().pipe(
             map(snapshots => {
@@ -31,9 +33,17 @@ export class FavoritesPage implements OnInit {
                 };
               });
             }),
+            tap(() => {
+              this.error = null;
+            }),
+            catchError(error => {
+              this.error = error;
+              return of([]);
+            }),
           );
         }
 
+        // logout
         return of([]);
       }),
     );

@@ -1,9 +1,9 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>즐겨찾기</ion-title>
-    <ion-buttons slot="primary">
-      <ion-button>편집</ion-button>
-    </ion-buttons>
+<!--    <ion-buttons slot="primary">-->
+<!--      <ion-button>편집</ion-button>-->
+<!--    </ion-buttons>-->
   </ion-toolbar>
 </ion-header>
 
@@ -32,45 +32,50 @@
   </ng-container>
 
   <ng-container *ngIf="authService.user$ | async">
-    <ion-list *ngIf="list$ | async as list" class="list">
+    <!--todo error-->
+    <ng-container *ngIf="list$ | async as list">
+      <ng-template #emptyTemplate>
+        <div class="empty-data">
+          <div class="icons">
+            <ion-icon name="musical-notes"></ion-icon>
+            <ion-icon name="arrow-forward-outline"></ion-icon>
+            <ion-icon name="heart"></ion-icon>
+          </div>
+          <br>
+          <a [routerLink]="['/tabs/home']">랜덤노래방</a>에서 노래를 뽑아서
+          <br>
+          마음에 드는 노래를 즐겨찾기에 보관하세요!
+        </div>
+      </ng-template>
 
-      <ion-item-sliding *ngFor="let item of list">
-        <ion-item>
-          <ion-label class="ion-text-wrap">
-            <ion-text>
-              <h3>{{item.song.title}}</h3>
-            </ion-text>
-            <ion-text color="primary">
-              <p>{{item.song.singer}}</p>
-            </ion-text>
-            <ion-text color="primary">
-              <p>{{item.song.tjNumber}}</p>
-            </ion-text>
-          </ion-label>
-          <ion-note slot="end" color="primary">
-            {{item.count}}
-          </ion-note>
-        </ion-item>
-        <ion-item-options side="end" (ionSwipe)="delete(item)">
-          <ion-item-option (click)="delete(item)" color="danger" expandable>
-            삭제
-          </ion-item-option>
-        </ion-item-options>
-      </ion-item-sliding>
+      <ion-list *ngIf="list.length > 0; else emptyTemplate" class="list">
+        <ion-item-sliding *ngFor="let item of list">
+          <ion-item>
+            <ion-label class="ion-text-wrap">
+              <ion-text>
+                <h3>{{item.song.title}}</h3>
+              </ion-text>
+              <ion-text color="primary">
+                <p>{{item.song.singer}}</p>
+              </ion-text>
+              <ion-text color="primary">
+                <p>{{item.song.tjNumber}}</p>
+              </ion-text>
+            </ion-label>
+            <ion-note slot="end" color="primary">
+              {{item.count}}
+            </ion-note>
+          </ion-item>
+          <ion-item-options side="end" (ionSwipe)="delete(item)">
+            <ion-item-option (click)="delete(item)" color="danger" expandable>
+              삭제
+            </ion-item-option>
+          </ion-item-options>
+        </ion-item-sliding>
 
-      <ion-item>
-        <ion-label class="ion-text-wrap">
-          <ion-text color="primary">
-            <h3>H3 Primary Title</h3>
-          </ion-text>
-          <p>Paragraph line 1</p>
-          <ion-text color="secondary">
-            <p>Paragraph line 2 secondary</p>
-          </ion-text>
-        </ion-label>
-      </ion-item>
+      </ion-list>
 
-    </ion-list>
+    </ng-container>
   </ng-container>
 
 </ion-content>
