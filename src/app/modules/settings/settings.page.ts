@@ -29,7 +29,7 @@ export class SettingsPage implements OnInit {
   constructor(
     public authService: AuthService,
     @Inject(APP_VERSION) public version: string,
-    public alertController: AlertController
+    private alertController: AlertController
 
   ) { }
 

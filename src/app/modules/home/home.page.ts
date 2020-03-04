@@ -1,9 +1,14 @@
-import {Component, ElementRef, HostBinding, Inject, OnInit, PLATFORM_ID, Renderer2} from '@angular/core';
+import {Component, HostBinding, Inject, OnInit, PLATFORM_ID} from '@angular/core';
 import {Song} from '../../core/models';
 import {AngularFireDatabase} from '@angular/fire/database';
-import {AngularFireAnalytics, APP_VERSION} from '@angular/fire/analytics';
+import {AngularFireAnalytics} from '@angular/fire/analytics';
 import {ApiService} from '../../core/http/api.service';
 import {isPlatformServer} from '@angular/common';
+import {AuthService} from '../../core/services/auth.service';
+import {finalize, switchMap, take} from 'rxjs/operators';
+import {AlertController} from '@ionic/angular';
+import {Router} from '@angular/router';
+import {of} from 'rxjs';
 
 @Component({
   selector: 'app-home',
@@ -13,7 +18,6 @@ import {isPlatformServer} from '@angular/common';
 export class HomePage implements OnInit {
 
   song: Song;
-  favorites: Song[] = [];
   loading = false;
   clickCount = 0;
 
@@ -25,8 +29,9 @@ export class HomePage implements OnInit {
     private analytics: AngularFireAnalytics,
     private apiService: ApiService,
     @Inject(PLATFORM_ID) private platformId: string,
-    private render2: Renderer2,
-    private elementRef: ElementRef,
+    private authService: AuthService,
+    private alertController: AlertController,
+    private router: Router,
   ) {
   }
 
@@ -64,13 +69,36 @@ export class HomePage implements OnInit {
   }
 
   addToFavorites(song: Song) {
-    this.setSingingMode(true);
+    this.authService.user$.pipe(
+      take(1),
+      switchMap(user => {
+        if (user) {
+          console.log(user);
+          this.setSingingMode(true); // todo
 
-    if (this.isMyFavorite(song)) {
-      return;
-    }
+          return of(null);
+        }
 
-    this.favorites.push(song);
+        return this.alertController.create({
+          header: '즐겨찾기',
+          message: '즐겨찾기에 담으려면 로그인이 필요해요',
+          buttons: [
+            {
+              text: '괜찮아요',
+              role: 'cancel',
+            }, {
+              text: '로그인하기',
+              handler: () => {
+                // todo
+                // 로그인 후 홈화면 다시 왔을때 노래 그대로 있어야 함
+                // or 로그인 후 즐겨찾기에 추가 -> 즐겨찾기 화면으로 리다이렉트
+                this.router.navigate(['/tabs/settings']);
+              }
+            }
+          ]
+        }).then(alert => alert.present());
+      }),
+    ).subscribe();
 
     this.analytics.logEvent('add_to_favorites', {
       song_id: song.id,
@@ -83,23 +111,9 @@ export class HomePage implements OnInit {
   setSingingMode(on: boolean) {
     if (on && !this.isSingingMode) {
       this.isSingingMode = true;
-      this.render2.setStyle(this.elementRef.nativeElement, 'background-color', this.getRandomRgb());
     } else if (!on && this.isSingingMode) {
       this.isSingingMode = false;
-      this.render2.removeAttribute(this.elementRef.nativeElement, 'style');
     }
-  }
-
-  isMyFavorite(song: Song): boolean {
-    return this.favorites.findIndex(s => s.id === song.id) !== -1;
-  }
-
-  getRandomRgb() {
-    const num = Math.round(0xffffff * Math.random());
-    const r = num >> 16;
-    const g = num >> 8 & 255;
-    const b = num & 255;
-    return 'rgb(' + r + ', ' + g + ', ' + b + ')';
   }
 
 }
