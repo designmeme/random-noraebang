@@ -52,14 +52,20 @@
         <ion-item-sliding *ngFor="let item of list">
           <ion-item>
             <ion-label class="ion-text-wrap">
+<!--              <ion-text>-->
+<!--                <h3>{{item.song.title}}</h3>-->
+<!--              </ion-text>-->
+<!--              <ion-text color="primary">-->
+<!--                <p>{{item.song.singer}}</p>-->
+<!--              </ion-text>-->
+<!--              <ion-text color="primary">-->
+<!--                <p>{{item.song.tjNumber}}</p>-->
+<!--              </ion-text>-->
               <ion-text>
-                <h3>{{item.song.title}}</h3>
-              </ion-text>
-              <ion-text color="primary">
-                <p>{{item.song.singer}}</p>
-              </ion-text>
-              <ion-text color="primary">
-                <p>{{item.song.tjNumber}}</p>
+                <p>songId: {{item.songId}}</p>
+                <p>id: {{item.id}}</p>
+                <p>createDate: {{item.createDate}}</p>
+                <p>updateDate: {{item.updateDate}}</p>
               </ion-text>
             </ion-label>
             <ion-note slot="end" color="primary">

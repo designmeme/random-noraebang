@@ -32,13 +32,13 @@
       <ion-item button (click)="logout()" [detailIcon]="false">
 <!--        <ion-icon name="exit-outline" slot="start"></ion-icon>-->
 <!--        <ion-icon name="log-out-outline" slot="start"></ion-icon>-->
-        <ion-icon name="sad-outline" slot="start"></ion-icon>
+        <ion-icon color="primary" name="sad-outline" slot="start"></ion-icon>
 <!--        <ion-icon name="hand-right-outline" slot="start"></ion-icon>-->
-        <ion-label>로그아웃</ion-label>
+        <ion-label color="primary">로그아웃</ion-label>
       </ion-item>
       <ion-item button (click)="delete(user)" [detailIcon]="false">
-        <ion-icon name="skull-outline" slot="start"></ion-icon>
-        <ion-label>탈퇴하기</ion-label>
+        <ion-icon color="danger" name="skull-outline" slot="start"></ion-icon>
+        <ion-label color="danger">탈퇴하기</ion-label>
       </ion-item>
     </ion-list>
   </ng-container>
@@ -49,8 +49,8 @@
 
   <ion-list>
     <ion-item [attr.href]="mailto" [detailIcon]="false">
-      <ion-icon name="mail-outline" slot="start"></ion-icon>
-      <ion-label>개발자에게 메일 보내기</ion-label>
+      <ion-icon color="primary" name="mail-outline" slot="start"></ion-icon>
+      <ion-label color="primary">개발자에게 메일 보내기</ion-label>
     </ion-item>
     <ion-item>
       <ion-icon name="information-circle-outline" slot="start"></ion-icon>
