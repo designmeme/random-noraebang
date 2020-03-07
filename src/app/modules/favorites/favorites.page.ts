@@ -26,10 +26,10 @@ export class FavoritesPage implements OnInit {
         if (user) {
           return this.db.list(`favorites/${user.uid}`).snapshotChanges().pipe(
             map(snapshots => {
-              return snapshots.map(event => {
+              return snapshots.map(snapshot => {
                 return {
-                  ...event.payload.val(),
-                  id: event.key,
+                  ...snapshot.payload.val(),
+                  id: snapshot.key,
                 };
               });
             }),

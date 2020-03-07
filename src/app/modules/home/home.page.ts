@@ -5,7 +5,7 @@ import {AngularFireAnalytics} from '@angular/fire/analytics';
 import {ApiService} from '../../core/http/api.service';
 import {isPlatformServer} from '@angular/common';
 import {AuthService} from '../../core/services/auth.service';
-import {finalize, switchMap, take, tap} from 'rxjs/operators';
+import {finalize, map, switchMap, take, tap} from 'rxjs/operators';
 import {AlertController} from '@ionic/angular';
 import {Router} from '@angular/router';
 import {of} from 'rxjs';
@@ -85,14 +85,14 @@ export class HomePage implements OnInit {
         if (user) {
           this.setSingingMode(true); // todo
 
-          const songRef = this.db.object<Favorite>(`favorites/${user.uid}/${song.id}`);
-          return songRef.valueChanges().pipe(
+          const listRef = this.db.list<Favorite>(`favorites/${user.uid}`, ref => ref.orderByChild('songId').equalTo(song.id));
+          return listRef.snapshotChanges().pipe(
             take(1),
-            switchMap(favorite => {
-              console.log('song', favorite);
-              if (favorite) {
-                const count = (favorite.count || 0) + 1;
-                return songRef.update({
+            map(list => (list || [])[0]),
+            switchMap(snapshot => {
+              if (snapshot) {
+                const count = (snapshot.payload.val().count || 0) + 1;
+                return listRef.update(snapshot.key, {
                   count,
                   updateDate: new Date().toISOString(),
                 }).then(() => {
@@ -104,7 +104,7 @@ export class HomePage implements OnInit {
                   }).then(alert => alert.present());
                 });
               } else {
-                return songRef.set({
+                return listRef.push({
                   songId: song.id,
                   count: 1,
                   createDate: new Date().toISOString(),

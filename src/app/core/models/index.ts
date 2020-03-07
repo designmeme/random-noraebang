@@ -6,6 +6,7 @@ export interface Song {
 }
 
 export interface Favorite {
+  id?: string;
   songId?: string;
   song?: Song;
   count?: number;
