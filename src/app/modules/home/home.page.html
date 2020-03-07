@@ -1,24 +1,35 @@
 <ion-content>
 
-  <h1>랜덤 노래방</h1>
+  <div class="contents">
+    <h1>랜덤 노래방</h1>
 
-  <div>
-    <div>{{song?.title || '노래 제목'}}</div>
-    <div>{{song?.singer || '가수'}}</div>
-    <div>TJ {{song?.tjNumber || '0000'}}</div>
-  </div>
+    <div>
+      <div>{{song?.title || '노래 제목'}}</div>
+      <div>{{song?.singer || '가수'}}</div>
+      <div>TJ {{song?.tjNumber || '0000'}}</div>
+    </div>
 
-  <button (click)="onClickGetRandomSong()" [disabled]="loading">🎰 다시 뽑기 🔄</button>
-  <ng-container *ngIf="loading">loading...</ng-container>
-  <br>
-  <br>
-  <button (click)="addToFavorites(song)" [disabled]="!song || loading">🎵 🎤 👩‍🎤 즐겨찾기에 추가 👨🏼‍🎤 🎤 🎶</button>
+    <button (click)="onClickGetRandomSong()" [disabled]="loading">🎰 다시 뽑기 🔄</button>
+    <ng-container *ngIf="loading">loading...</ng-container>
+    <br>
+    <br>
+    <ion-button color="danger"
+                size="large"
+                fill="clear"
+                shape="round"
+                class="btn-favorite"
+                (click)="addToFavorites(song)"
+                [disabled]="!song || loading">
+      <ion-icon name="heart-outline" slot="icon-only"></ion-icon>
+<!--      <ion-icon name="heart" slot="icon-only"></ion-icon>-->
+    </ion-button>
 
-  <div *ngIf="isSingingMode">
-    즐겨찾기 성공
-    😀😃😄😁😆😅😂🤣☺️😊😇🙂🙃😉😌😍🥰😘😗😙😚😋😛😝😜🤪🤨🧐🤓😎🤩
-    🕵️👩‍🎤🧑‍🎤👨🏼‍🎤👩🏻‍✈️🧑🏼‍🚀🧟‍♂️🧟🧟‍♀️💃🕺🏻👯‍♀️🤹‍♀️🥇💯🎬🎸🎺🎷🥁🎻🪕🎧🎤🚀🎢🌋
-    📲📸🎥📽🎞📺🎙📡💡💸💰💷💎❤️🧡💛🚗⛵️🏡🛩🏦🏡🏢🏰
+    <div *ngIf="isSingingMode">
+      즐겨찾기 성공
+      😀😃😄😁😆😅😂🤣☺️😊😇🙂🙃😉😌😍🥰😘😗😙😚😋😛😝😜🤪🤨🧐🤓😎🤩
+      🕵️👩‍🎤🧑‍🎤👨🏼‍🎤👩🏻‍✈️🧑🏼‍🚀🧟‍♂️🧟🧟‍♀️💃🕺🏻👯‍♀️🤹‍♀️🥇💯🎬🎸🎺🎷🥁🎻🪕🎧🎤🚀🎢🌋
+      📲📸🎥📽🎞📺🎙📡💡💸💰💷💎❤️🧡💛🚗⛵️🏡🛩🏦🏡🏢🏰
+    </div>
   </div>
 
 </ion-content>

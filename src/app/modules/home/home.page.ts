@@ -1,14 +1,15 @@
 import {Component, HostBinding, Inject, OnInit, PLATFORM_ID} from '@angular/core';
-import {Song} from '../../core/models';
+import {Favorite, Song} from '../../core/models';
 import {AngularFireDatabase} from '@angular/fire/database';
 import {AngularFireAnalytics} from '@angular/fire/analytics';
 import {ApiService} from '../../core/http/api.service';
 import {isPlatformServer} from '@angular/common';
 import {AuthService} from '../../core/services/auth.service';
-import {finalize, switchMap, take} from 'rxjs/operators';
+import {finalize, switchMap, take, tap} from 'rxjs/operators';
 import {AlertController} from '@ionic/angular';
 import {Router} from '@angular/router';
 import {of} from 'rxjs';
+import {LoadingService} from '../../core/services/loading.service';
 
 @Component({
   selector: 'app-home',
@@ -23,6 +24,7 @@ export class HomePage implements OnInit {
 
   @HostBinding('class.mode-singing')
   isSingingMode = false;
+  addLoading = false;
 
   constructor(
     private db: AngularFireDatabase,
@@ -32,6 +34,7 @@ export class HomePage implements OnInit {
     private authService: AuthService,
     private alertController: AlertController,
     private router: Router,
+    private loadingService: LoadingService,
   ) {
   }
 
@@ -69,16 +72,56 @@ export class HomePage implements OnInit {
   }
 
   addToFavorites(song: Song) {
+    if (this.addLoading) {
+      return false;
+    }
+
+    this.addLoading = true;
+    this.loadingService.presentLoading();
+
     this.authService.user$.pipe(
       take(1),
       switchMap(user => {
         if (user) {
-          console.log(user);
           this.setSingingMode(true); // todo
 
-          return of(null);
+          const songRef = this.db.object<Favorite>(`favorites/${user.uid}/${song.id}`);
+          return songRef.valueChanges().pipe(
+            take(1),
+            switchMap(favorite => {
+              console.log('song', favorite);
+              if (favorite) {
+                const count = (favorite.count || 0) + 1;
+                return songRef.update({
+                  count,
+                  updateDate: new Date().toISOString(),
+                }).then(() => {
+                  this.loadingService.dismissLoading();
+                  return this.alertController.create({
+                    header: '즐겨찾기 완료',
+                    message: `❤️ ${count}번 즐겨찾기했어요!`,
+                    buttons: [{ text: '확인' }],
+                  }).then(alert => alert.present());
+                });
+              } else {
+                return songRef.set({
+                  songId: song.id,
+                  count: 1,
+                  createDate: new Date().toISOString(),
+                }).then(() => {
+                  this.loadingService.dismissLoading();
+                  return this.alertController.create({
+                    header: '즐겨찾기 완료',
+                    message: `❤️ 즐겨찾기에 보관했어요`,
+                    buttons: [{ text: '확인' }],
+                  }).then(alert => alert.present());
+                });
+              }
+            }),
+          );
         }
 
+        this.loadingService.dismissLoading();
         return this.alertController.create({
           header: '즐겨찾기',
           message: '즐겨찾기에 담으려면 로그인이 필요해요',
@@ -97,6 +140,13 @@ export class HomePage implements OnInit {
             }
           ]
         }).then(alert => alert.present());
+      }),
+      tap(() => {
+        this.addLoading = false;
+      }),
+      finalize(() => {
+        this.addLoading = false;
+        this.loadingService.dismissLoading();
       }),
     ).subscribe();
 
