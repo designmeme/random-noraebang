@@ -24,7 +24,7 @@ export class HomePage implements OnInit {
   clickCount = 0;
 
   @HostBinding('class.mode-singing')
-  isSingingMode = false;
+  added = false;
   addLoading = false;
 
   constructor(
@@ -84,8 +84,6 @@ export class HomePage implements OnInit {
       first(),
       switchMap(user => {
         if (user) {
-          this.setSingingMode(true); // todo
-
           return this.favoritesApi.getItem(song.id).pipe(first());
         }
 
@@ -110,38 +108,32 @@ export class HomePage implements OnInit {
         return EMPTY;
       }),
       switchMap(fSong => {
+        const date = new Date().toISOString();
         if (fSong) {
           const count = (fSong.count || 0) + 1;
           return this.favoritesApi.updateItem({
             songId: +fSong.songId,
             count,
-            updateDate: new Date().toISOString(),
-          }).pipe(
-            tap(() => {
-              this.alertController.create({
-                header: '즐겨찾기 완료',
-                message: `❤️ ${count}번 즐겨찾기했어요!`,
-                buttons: [{ text: '확인' }],
-              }).then(alert => alert.present());
-            })
-          );
+            updateDate: date,
+          });
         } else {
           return this.favoritesApi.createItem({
             songId: +song.id,
             count: 1,
-            createDate: new Date().toISOString(),
-          }).pipe(
-            tap(() => {
-              this.alertController.create({
-                header: '즐겨찾기 완료',
-                message: `❤️ 즐겨찾기에 보관했어요`,
-                buttons: [{ text: '확인' }],
-              }).then(alert => alert.present());
-            })
-          );
+            createDate: date,
+            updateDate: date,
+          });
         }
       }),
       tap(() => {
+        this.analytics.logEvent('add_to_favorites', {
+          song_id: song.id,
+          song_title: song.title,
+          song_singer: song.singer,
+          song_tjNumber: song.tjNumber,
+        });
+
+        this.setSingingMode(true);
         this.addLoading = false;
       }),
       finalize(() => {
@@ -149,19 +141,13 @@ export class HomePage implements OnInit {
       }),
     ).subscribe();
 
-    this.analytics.logEvent('add_to_favorites', {
-      song_id: song.id,
-      song_title: song.title,
-      song_singer: song.singer,
-      song_tjNumber: song.tjNumber,
-    });
   }
 
   setSingingMode(on: boolean) {
-    if (on && !this.isSingingMode) {
-      this.isSingingMode = true;
-    } else if (!on && this.isSingingMode) {
-      this.isSingingMode = false;
+    if (on && !this.added) {
+      this.added = true;
+    } else if (!on && this.added) {
+      this.added = false;
     }
   }
 

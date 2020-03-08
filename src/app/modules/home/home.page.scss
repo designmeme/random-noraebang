@@ -4,4 +4,14 @@
   align-items: center;
   justify-content: center;
   height: 100%;
+
+  .app-title {
+    font-size: 16px;
+  }
+
+  .song {
+    width: 300px;
+    text-align: center;
+    margin-bottom: 20px;
+  }
 }

@@ -42,7 +42,6 @@ export class FavoritesApiService {
   }
 
   getItem(songId: string | number) {
-    console.log(songId);
     return this.authService.user$.pipe(
       filter(user => !!user),
       switchMap(user => this.db.object<Favorite>(`favorites/${user.uid}/${songId}`).valueChanges()),

@@ -29,7 +29,7 @@ export class FavoritesPage implements OnInit {
         this.error = error;
         return of([]);
       }),
-      finalize(() => console.log('list finalized')),
+      // finalize(() => console.log('list finalized')),
     );
   }
 
