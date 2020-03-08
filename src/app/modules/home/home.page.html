@@ -3,10 +3,16 @@
   <div class="contents">
     <h1>랜덤 노래방</h1>
 
-    <div>
-      <div>{{song?.title || '노래 제목'}}</div>
-      <div>{{song?.singer || '가수'}}</div>
-      <div>TJ {{song?.tjNumber || '0000'}}</div>
+    <div class="song" *ngIf="song">
+      <ion-text>
+        <h2>{{song.title}}</h2>
+      </ion-text>
+      <ion-text color="medium">
+        <p>{{song.singer}}</p>
+      </ion-text>
+      <ion-chip color="primary">
+        <ion-label color="primary">TJ {{song?.tjNumber}}</ion-label>
+      </ion-chip>
     </div>
 
     <button (click)="onClickGetRandomSong()" [disabled]="loading">🎰 다시 뽑기 🔄</button>

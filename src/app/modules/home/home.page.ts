@@ -5,11 +5,12 @@ import {AngularFireAnalytics} from '@angular/fire/analytics';
 import {ApiService} from '../../core/http/api.service';
 import {isPlatformServer} from '@angular/common';
 import {AuthService} from '../../core/services/auth.service';
-import {finalize, map, switchMap, take, tap} from 'rxjs/operators';
+import {finalize, first, map, switchMap, take, tap} from 'rxjs/operators';
 import {AlertController} from '@ionic/angular';
 import {Router} from '@angular/router';
-import {of} from 'rxjs';
+import {EMPTY, of} from 'rxjs';
 import {LoadingService} from '../../core/services/loading.service';
+import {FavoritesApiService} from '../../core/http/favorites-api.service';
 
 @Component({
   selector: 'app-home',
@@ -30,6 +31,7 @@ export class HomePage implements OnInit {
     private db: AngularFireDatabase,
     private analytics: AngularFireAnalytics,
     private apiService: ApiService,
+    private favoritesApi: FavoritesApiService,
     @Inject(PLATFORM_ID) private platformId: string,
     private authService: AuthService,
     private alertController: AlertController,
@@ -72,57 +74,22 @@ export class HomePage implements OnInit {
   }
 
   addToFavorites(song: Song) {
-    if (this.addLoading) {
+    if (this.addLoading || !song) {
       return false;
     }
 
     this.addLoading = true;
-    this.loadingService.presentLoading();
 
     this.authService.user$.pipe(
-      take(1),
+      first(),
       switchMap(user => {
         if (user) {
           this.setSingingMode(true); // todo
 
-          const listRef = this.db.list<Favorite>(`favorites/${user.uid}`, ref => ref.orderByChild('songId').equalTo(song.id));
-          return listRef.snapshotChanges().pipe(
-            take(1),
-            map(list => (list || [])[0]),
-            switchMap(snapshot => {
-              if (snapshot) {
-                const count = (snapshot.payload.val().count || 0) + 1;
-                return listRef.update(snapshot.key, {
-                  count,
-                  updateDate: new Date().toISOString(),
-                }).then(() => {
-                  this.loadingService.dismissLoading();
-                  return this.alertController.create({
-                    header: '즐겨찾기 완료',
-                    message: `❤️ ${count}번 즐겨찾기했어요!`,
-                    buttons: [{ text: '확인' }],
-                  }).then(alert => alert.present());
-                });
-              } else {
-                return listRef.push({
-                  songId: song.id,
-                  count: 1,
-                  createDate: new Date().toISOString(),
-                }).then(() => {
-                  this.loadingService.dismissLoading();
-                  return this.alertController.create({
-                    header: '즐겨찾기 완료',
-                    message: `❤️ 즐겨찾기에 보관했어요`,
-                    buttons: [{ text: '확인' }],
-                  }).then(alert => alert.present());
-                });
-              }
-            }),
-          );
+          return this.favoritesApi.getItem(song.id).pipe(first());
         }
 
-        this.loadingService.dismissLoading();
-        return this.alertController.create({
+        this.alertController.create({
           header: '즐겨찾기',
           message: '즐겨찾기에 담으려면 로그인이 필요해요',
           buttons: [
@@ -140,13 +107,45 @@ export class HomePage implements OnInit {
             }
           ]
         }).then(alert => alert.present());
+        return EMPTY;
+      }),
+      switchMap(fSong => {
+        if (fSong) {
+          const count = (fSong.count || 0) + 1;
+          return this.favoritesApi.updateItem({
+            songId: +fSong.songId,
+            count,
+            updateDate: new Date().toISOString(),
+          }).pipe(
+            tap(() => {
+              this.alertController.create({
+                header: '즐겨찾기 완료',
+                message: `❤️ ${count}번 즐겨찾기했어요!`,
+                buttons: [{ text: '확인' }],
+              }).then(alert => alert.present());
+            })
+          );
+        } else {
+          return this.favoritesApi.createItem({
+            songId: +song.id,
+            count: 1,
+            createDate: new Date().toISOString(),
+          }).pipe(
+            tap(() => {
+              this.alertController.create({
+                header: '즐겨찾기 완료',
+                message: `❤️ 즐겨찾기에 보관했어요`,
+                buttons: [{ text: '확인' }],
+              }).then(alert => alert.present());
+            })
+          );
+        }
       }),
       tap(() => {
         this.addLoading = false;
       }),
       finalize(() => {
         this.addLoading = false;
-        this.loadingService.dismissLoading();
       }),
     ).subscribe();
 

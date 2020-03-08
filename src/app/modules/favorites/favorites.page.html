@@ -52,25 +52,28 @@
         <ion-item-sliding *ngFor="let item of list">
           <ion-item>
             <ion-label class="ion-text-wrap">
-<!--              <ion-text>-->
-<!--                <h3>{{item.song.title}}</h3>-->
-<!--              </ion-text>-->
-<!--              <ion-text color="primary">-->
-<!--                <p>{{item.song.singer}}</p>-->
-<!--              </ion-text>-->
-<!--              <ion-text color="primary">-->
-<!--                <p>{{item.song.tjNumber}}</p>-->
-<!--              </ion-text>-->
-              <ion-text>
-                <p>songId: {{item.songId}}</p>
-                <p>id: {{item.id}}</p>
-                <p>createDate: {{item.createDate}}</p>
-                <p>updateDate: {{item.updateDate}}</p>
-              </ion-text>
+              <div class="label-inner">
+                <div class="count">
+                  <ion-icon name="heart"></ion-icon>
+                  <ion-text color="danger">
+                    {{item.count}}
+                  </ion-text>
+                </div>
+                <div class="texts">
+                  <ion-text>
+                    <h2>{{item.song.title}}</h2>
+                  </ion-text>
+                  <ion-text color="medium">
+                    <p>{{item.song.singer}}</p>
+                  </ion-text>
+                </div>
+                <div class="numbers">
+                  <ion-chip color="primary">
+                    <ion-label color="primary">TJ {{item.song.tjNumber}}</ion-label>
+                  </ion-chip>
+                </div>
+              </div>
             </ion-label>
-            <ion-note slot="end" color="primary">
-              {{item.count}}
-            </ion-note>
           </ion-item>
           <ion-item-options side="end" (ionSwipe)="delete(item)">
             <ion-item-option (click)="delete(item)" color="danger" expandable>

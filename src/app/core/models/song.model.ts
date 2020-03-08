@@ -1,13 +1,12 @@
 export interface Song {
-  id?: string;
+  id?: number;
   title?: string;
   singer?: string;
   tjNumber?: number;
 }
 
 export interface Favorite {
-  id?: string;
-  songId?: string;
+  songId?: number;
   song?: Song;
   count?: number;
   createDate?: string;
