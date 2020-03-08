@@ -14,10 +14,20 @@ const routes: Routes = [
       {
         path: 'favorites',
         loadChildren: () => import('../favorites/favorites.module').then(m => m.FavoritesPageModule),
+        data: {
+          meta: {
+            title: '즐겨찾기',
+          }
+        }
       },
       {
         path: 'settings',
         loadChildren: () => import('../settings/settings.module').then(m => m.SettingsPageModule),
+        data: {
+          meta: {
+            title: '내 정보',
+          }
+        }
       },
       {
         path: '**',

@@ -20,6 +20,8 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
             "assets": [
+              "src/sitemap.xml",
+              "src/robots.txt",
               {
                 "glob": "**/*",
                 "input": "src/assets",
@@ -101,6 +103,8 @@
             "styles": [],
             "scripts": [],
             "assets": [
+              "src/sitemap.xml",
+              "src/robots.txt",
               {
                 "glob": "favicon.ico",
                 "input": "src/",

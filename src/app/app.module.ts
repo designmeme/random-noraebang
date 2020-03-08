@@ -33,8 +33,8 @@ export function metaFactory(document: Document): MetaLoader {
   const origin = environment.url;
   return new MetaStaticLoader({
     pageTitlePositioning: PageTitlePositioning.PrependPageTitle,
-    pageTitleSeparator: ' - ',
-    applicationName: '랜덤 노래방',
+    pageTitleSeparator: ' | ',
+    applicationName: '랜덤노래방 - 랜덤게임・애창곡',
     applicationUrl: origin,
     defaults: {
       title: '랜덤노래방 - 랜덤게임・애창곡',
@@ -43,7 +43,7 @@ export function metaFactory(document: Document): MetaLoader {
       author: '이지혜, ghe.lee19@gmail.com',
       robots: 'index, follow',
       // og tags https://developers.facebook.com/docs/sharing/webmasters
-      'og:site_name': '랜덤 노래방',
+      'og:site_name': '랜덤노래방',
       'og:image': `${origin}/assets/images/og/home.png`, // full url
       'og:type': 'website',
       'og:locale': 'ko_KR',
