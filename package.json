@@ -1,6 +1,6 @@
 {
   "name": "random-noraebang",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -8,7 +8,9 @@
     "build:prod": "ng build --prod",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "deploy:prod": "npm run build:prod && firebase deploy --only hosting --project random-noraebang",
+    "deploy:dev": "npm run build && firebase deploy --only hosting --project random-noraebang-dev"
   },
   "private": true,
   "dependencies": {
