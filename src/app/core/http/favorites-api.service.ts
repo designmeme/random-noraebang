@@ -20,23 +20,30 @@ export class FavoritesApiService {
       filter(user => !!user),
       switchMap(user => this.db.list<Favorite>(`favorites/${user.uid}`, ref => ref.orderByChild('updateDate')).valueChanges()),
       switchMap(list => {
-        return combineLatest(
-          of(list.reverse()), // reverse list
-          combineLatest<Song[]>(list.map(item => this.db.object(`songs/${item.songId}`).valueChanges().pipe(first()))),
-        );
-      }),
-      map(([favorites, songs]) => {
-        return favorites.map(f => {
-          const songData = songs.find(s => +s.id === +f.songId) || {};
-          return {
-            ...f,
-            song: {
-              title: songData.title,
-              singer: songData.singer,
-              tjNumber: songData.tjNumber,
-            }
-          };
-        });
+        if (list && list.length > 0) {
+          return combineLatest(
+            of(list.reverse()), // reverse list
+            combineLatest<Song[]>(list.map(item => {
+              return this.db.object(`songs/${item.songId}`).valueChanges().pipe(first());
+            })),
+          ).pipe(
+            map(([favorites, songs]) => {
+              return favorites.map(f => {
+                const songData = songs.find(s => +s.id === +f.songId) || {};
+                return {
+                  ...f,
+                  song: {
+                    title: songData.title,
+                    singer: songData.singer,
+                    tjNumber: songData.tjNumber,
+                  }
+                };
+              });
+            }),
+          );
+        } else {
+          return of(null);
+        }
       }),
     );
   }
