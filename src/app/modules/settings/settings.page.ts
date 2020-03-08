@@ -1,5 +1,5 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {APP_VERSION} from '@angular/fire/analytics';
+import {AngularFireAnalytics, APP_VERSION} from '@angular/fire/analytics';
 import {AuthService} from '../../core/services/auth.service';
 import { AlertController } from '@ionic/angular';
 import {User} from 'firebase';
@@ -29,7 +29,8 @@ export class SettingsPage implements OnInit {
   constructor(
     public authService: AuthService,
     @Inject(APP_VERSION) public version: string,
-    private alertController: AlertController
+    private alertController: AlertController,
+    private analytics: AngularFireAnalytics,
 
   ) { }
 
@@ -38,7 +39,12 @@ export class SettingsPage implements OnInit {
 
   login() {
     this.authService.login()
-      // .then(result => console.log('signInWithPopup result', result))
+      .then(result => {
+        // console.log('signInWithPopup result', result);
+        this.analytics.logEvent(result.additionalUserInfo.isNewUser ? 'sign_up' : 'login', {
+          providerId: result.additionalUserInfo.providerId
+        });
+      })
       .catch(error => {
         // const errorCode = error.code;
         // const errorMessage = error.message;
@@ -62,8 +68,11 @@ export class SettingsPage implements OnInit {
           text: '예',
           handler: () => {
             this.authService.logout()
-              // .then(result => console.log('signout result', result))
-              .catch(error => console.error('signout error', error));
+              .then(result => {
+                // console.log('logout result', result);
+                this.analytics.logEvent('logout');
+              })
+              .catch(error => console.error('logout error', error));
           }
         }
       ]
@@ -84,6 +93,8 @@ export class SettingsPage implements OnInit {
           handler: () => {
             user.delete()
               .then(() => {
+                this.analytics.logEvent('leave');
+
                 this.alertController.create({
                   header: '탈퇴하기 완료',
                   message: '탈퇴처리가 완료되었어요. 계정 정보를 삭제했습니다.',
