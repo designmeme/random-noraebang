@@ -27,9 +27,10 @@ export class AdComponent implements OnInit, AfterViewInit {
 
   private initAd() {
     const script = this.renderer2.createElement('script');
-    script.src = 'https://ads-partners.coupang.com/g.js';
+    // script.src = 'https://ads-partners.coupang.com/g.js';
+    script.src = 'https://t1.daumcdn.net/kas/static/ba.min.js';
     script.onload = () => {
-      this.getAd();
+      // this.getAd();
     };
 
     this.renderer2.appendChild(this.element.nativeElement, script);
