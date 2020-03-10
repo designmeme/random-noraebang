@@ -49,38 +49,40 @@
 
     <ng-container *ngIf="list$ | async as list; else emptyTemplate">
       <ion-list class="list">
-        <ion-item-sliding *ngFor="let item of list">
-          <ion-item [attr.data-id]="item.songId">
-            <ion-label class="ion-text-wrap">
-              <div class="label-inner">
-                <div class="count">
-                  <ion-icon name="heart"></ion-icon>
-                  <ion-text color="danger">
-                    {{item.count}}
-                  </ion-text>
+        <ng-container *ngFor="let item of list; index as i">
+          <ion-item-sliding >
+            <ion-item [attr.data-id]="item.songId">
+              <ion-label class="ion-text-wrap">
+                <div class="label-inner">
+                  <div class="count">
+                    <ion-icon name="heart"></ion-icon>
+                    <ion-text color="danger">
+                      {{item.count}}
+                    </ion-text>
+                  </div>
+                  <div class="texts">
+                    <ion-text>
+                      <h2>{{item.song.title}}</h2>
+                    </ion-text>
+                    <ion-text color="medium">
+                      <p>{{item.song.singer}}</p>
+                    </ion-text>
+                  </div>
+                  <div class="numbers">
+                    <ion-chip class="chip-song-number tj">
+                      <ion-label>TJ {{item.song.tjNumber}}</ion-label>
+                    </ion-chip>
+                  </div>
                 </div>
-                <div class="texts">
-                  <ion-text>
-                    <h2>{{item.song.title}}</h2>
-                  </ion-text>
-                  <ion-text color="medium">
-                    <p>{{item.song.singer}}</p>
-                  </ion-text>
-                </div>
-                <div class="numbers">
-                  <ion-chip class="chip-song-number tj">
-                    <ion-label>TJ {{item.song.tjNumber}}</ion-label>
-                  </ion-chip>
-                </div>
-              </div>
-            </ion-label>
-          </ion-item>
-          <ion-item-options side="end" (ionSwipe)="delete(item)">
-            <ion-item-option (click)="delete(item)" [disabled]="deleteLoading" color="danger" expandable>
-              삭제
-            </ion-item-option>
-          </ion-item-options>
-        </ion-item-sliding>
+              </ion-label>
+            </ion-item>
+            <ion-item-options side="end" (ionSwipe)="delete(item)">
+              <ion-item-option (click)="delete(item)" [disabled]="deleteLoading" color="danger" expandable>
+                삭제
+              </ion-item-option>
+            </ion-item-options>
+          </ion-item-sliding>
+        </ng-container>
       </ion-list>
 
     </ng-container>
