@@ -26,12 +26,13 @@ export class SettingsPage implements OnInit {
     return `mailto:ghe.lee@gmail.com?subject=${subject}&body=${body}`;
   }
 
+  enabledGoogle = this.authService.canUseGoogleAuth();
+
   constructor(
     public authService: AuthService,
     @Inject(APP_VERSION) public version: string,
     private alertController: AlertController,
     private analytics: AngularFireAnalytics,
-
   ) { }
 
   ngOnInit() {

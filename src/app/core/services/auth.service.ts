@@ -39,4 +39,13 @@ export class AuthService {
   async logout() {
     return await this.auth.auth.signOut();
   }
+
+  /**
+   * 구글로그인 사용 가능여부를 반환한다.
+   * 참고) 카카오톡 웹뷰에서 로그인 불가이슈 https://devtalk.kakao.com/t/disallowed-useragent/30703
+   */
+  canUseGoogleAuth(): boolean {
+    const userAgent = navigator.userAgent.toLocaleLowerCase();
+    return userAgent.indexOf('kakaotalk') === -1;
+  }
 }
