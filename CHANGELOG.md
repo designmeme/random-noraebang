@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.2](https://github.com/designmeme/random-noraebang/compare/v1.0.1...v1.0.2) (2020-03-12)
+
+
+### Bug Fixes
+
+* **ad:** 쿠팡으로 광고 재변경 ([ee6f191](https://github.com/designmeme/random-noraebang/commit/ee6f1915f823b63130dbb4cef6acbed3b5f951d2))
+
 ### [1.0.1](https://github.com/designmeme/random-noraebang/compare/v1.0.0...v1.0.1) (2020-03-10)
 
 
