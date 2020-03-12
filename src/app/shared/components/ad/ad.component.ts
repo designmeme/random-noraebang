@@ -8,6 +8,9 @@ import {isPlatformServer} from '@angular/common';
 })
 export class AdComponent implements OnInit, AfterViewInit {
 
+  showKakaoFit = false;
+  showAdsense = false;
+
   constructor(
     private renderer2: Renderer2,
     private element: ElementRef,
@@ -22,15 +25,43 @@ export class AdComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.initAd();
+    // this.initKakaoFit();
+    this.initCoopangAd();
+    // this.initAdsense();
   }
 
-  private initAd() {
+  private initAdsense() {
+    this.showAdsense = true;
+
     const script = this.renderer2.createElement('script');
-    // script.src = 'https://ads-partners.coupang.com/g.js';
-    script.src = 'https://t1.daumcdn.net/kas/static/ba.min.js';
+    script.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js';
+    script.async = true;
     script.onload = () => {
-      // this.getAd();
+      // @ts-ignore
+      (adsbygoogle = window.adsbygoogle || []).push({});
+    };
+
+    this.renderer2.appendChild(this.element.nativeElement, script);
+  }
+
+  private initKakaoFit() {
+    this.showKakaoFit = true;
+
+    const script = this.renderer2.createElement('script');
+    script.src = 'https://t1.daumcdn.net/kas/static/ba.min.js';
+    script.async = true;
+    // script.onload = () => {
+    // };
+
+    this.renderer2.appendChild(this.element.nativeElement, script);
+  }
+
+  private initCoopangAd() {
+    const script = this.renderer2.createElement('script');
+    script.src = 'https://ads-partners.coupang.com/g.js';
+    script.async = true;
+    script.onload = () => {
+      this.getAd();
     };
 
     this.renderer2.appendChild(this.element.nativeElement, script);

@@ -1,4 +1,16 @@
-<ins class="kakao_ad_area" style="display:none;"
-     data-ad-unit    = "DAN-qeff49urrkv7"
-     data-ad-width   = "320"
-     data-ad-height  = "50"></ins>
+<ng-container *ngIf="showAdsense">
+  <!-- 랜덤노래방-즐겨찾기-디스플레이 -->
+  <ins class="adsbygoogle"
+       style="display:inline-block;width:320px;height:70px"
+       data-ad-client="ca-pub-3088246349891349"
+       data-ad-slot="6094219929"></ins>
+</ng-container>
+
+<ng-container *ngIf="showKakaoFit">
+  <ins class="kakao_ad_area" style="display:none;"
+       data-ad-unit    = "DAN-qeff49urrkv7"
+       data-ad-width   = "320"
+       data-ad-height  = "50"></ins>
+</ng-container>
+
+
